@@ -1,20 +1,19 @@
 # Ghost Fleet Dashboard
 
-A real-time robotics fleet monitoring dashboard that demonstrates telemetry visualization and alert capabilities for Physical AI systems. This MVP showcases core patterns used in robotic fleet management with live WebSocket data streaming.
+A real-time robotics fleet monitoring system that demonstrates telemetry simulation and visualization for Physical AI systems. This MVP showcases core patterns used in robotic fleet management with live WebSocket data streaming via Foxglove protocol.
 
 ## 🚀 Features
 
 - **Real-time Robot Tracking**: Live location monitoring with 10Hz update rate
 - **Fleet Health Monitoring**: Battery levels and operational status tracking  
-- **WebSocket Architecture**: Foxglove protocol for real-time data streaming
-- **Modern Tech Stack**: Next.js 15+, TypeScript, Python simulation backend
-- **Alert System**: Low battery and error state notifications
-- **Responsive Design**: Clean dashboard UI with Tailwind CSS
+- **Foxglove Protocol**: Industry-standard WebSocket streaming for robotics
+- **Professional Visualization**: Foxglove Studio web app for dashboards
+- **Realistic Simulation**: Circular robot movement with battery cycling
 
 ## 📋 Prerequisites
 
-- **Node.js** 18+ and pnpm
 - **Python** 3.8+ 
+- **Web Browser** (for Foxglove Studio)
 - **Git**
 
 ## 🛠️ Quick Start
@@ -51,28 +50,19 @@ Simulation running - publishing telemetry at 10Hz (100ms intervals)
 Publishing... Location: (100.0, 0.0), Battery: 100%, State: OPERATIONAL
 ```
 
-### 3. Frontend Setup (Dashboard)
+### 3. Visualization Setup (Foxglove Studio)
 
-**In a new terminal:**
-```bash
-cd frontend
-
-# Install dependencies
-pnpm install
-
-# Start the development server
-pnpm run dev
-```
-
-**Access the Dashboard:**
-Open [http://localhost:3003](http://localhost:3003) in your browser
+1. **Open Foxglove Studio**: Navigate to https://app.foxglove.dev
+2. **Connect**: Click "Open connection" → "Foxglove WebSocket"
+3. **Enter URL**: `ws://localhost:8765`
+4. **Visualize**: Add panels for `/location` and `/status` channels
 
 ## 🎯 Usage
 
-1. **Start Backend**: Run the robot simulation first (`python run_sim.py`)
-2. **Start Frontend**: Launch the dashboard (`pnpm run dev`) 
-3. **Monitor**: Watch real-time robot telemetry in your browser
-4. **Verify**: Check browser console for incoming data messages
+1. **Start Simulation**: Run `python run_sim.py` in the backend directory
+2. **Open Foxglove**: Go to https://app.foxglove.dev in your browser
+3. **Connect**: Use WebSocket connection to `ws://localhost:8765`
+4. **Monitor**: Watch real-time robot telemetry with professional tools
 
 ## 🏗️ Architecture
 
@@ -82,14 +72,6 @@ ghost-fleet-dashboard/
 │   ├── robot_sim.py  # Core simulation logic
 │   ├── run_sim.py    # Simulation runner
 │   └── test_sim.py   # Test suite
-├── frontend/         # Next.js dashboard application
-│   ├── src/
-│   │   ├── app/      # Next.js app router pages
-│   │   ├── components/ # React components  
-│   │   ├── hooks/    # Custom hooks (WebSocket)
-│   │   ├── types/    # TypeScript definitions
-│   │   └── config/   # Configuration
-│   └── package.json
 └── mvp-charter.md    # Project requirements
 ```
 
@@ -100,18 +82,17 @@ ghost-fleet-dashboard/
 - Foxglove WebSocket server (port 8765)
 - Real-time telemetry simulation at 10Hz
 
-**Frontend:**
-- Next.js 15+ with TypeScript
-- React 18+ with custom hooks
-- Tailwind CSS for styling
-- WebSocket client for Foxglove protocol
+**Visualization:**
+- Foxglove Studio Web App (https://app.foxglove.dev)
+- Professional robotics dashboard interface
+- Real-time WebSocket connection to backend
 
 ## 📊 Data Flow
 
 1. **Backend** publishes robot telemetry via Foxglove WebSocket protocol
-2. **Frontend** subscribes to `/location` and `/status` channels
-3. **Real-time Updates** displayed in dashboard every 100ms
-4. **Alert System** triggers on low battery (≤20%) or error states
+2. **Foxglove Studio** subscribes to `/location` and `/status` channels
+3. **Real-time Updates** displayed in professional dashboard every 100ms
+4. **Built-in Alerts** available for low battery (≤20%) or error states
 
 ## 🧪 Testing
 
@@ -122,51 +103,48 @@ source venv/bin/activate
 python test_sim.py
 ```
 
-**Frontend Testing:**
-```bash
-cd frontend
-pnpm run build  # Verify build works
-pnpm run lint   # Check code quality
-```
+**Integration Testing:**
+1. Start backend simulation: `python run_sim.py`
+2. Connect Foxglove Studio to `ws://localhost:8765`
+3. Verify `/location` and `/status` channels appear
+4. Confirm real-time data updates at 10Hz
 
 ## 📈 Development Status
 
-### ✅ Sprint 1 - Complete
+### ✅ MVP Complete
 - [x] Backend robot simulation with Foxglove protocol
-- [x] Frontend WebSocket integration
-- [x] Real-time dashboard with live data display
-- [x] Console logging for data verification
+- [x] Real-time telemetry streaming at 10Hz  
+- [x] Professional visualization via Foxglove Studio
+- [x] Circular robot movement simulation
+- [x] Battery cycling (100% → 0% → reset)
+- [x] Console logging for operation verification
 
-### 🚧 Sprint 2 - In Progress  
-- [ ] SVG map visualization with robot position
-- [ ] Battery status panels with color coding
-- [ ] Responsive two-panel layout
-
-### 📋 Sprint 3 - Planned
-- [ ] Alert system for low battery and errors
-- [ ] Error state simulation and recovery
-- [ ] Performance optimization
+### 📋 Future Enhancements
+- [ ] Error state simulation (30% chance every 20s, 5s recovery)
+- [ ] Multi-robot fleet simulation
+- [ ] Historical data logging
+- [ ] Custom alert configurations
 
 ## 🔍 Troubleshooting
 
 **Backend Issues:**
 - Ensure Python 3.8+ is installed
 - Activate virtual environment before running
-- Check port 8765 is not in use
-
-**Frontend Issues:**
-- Use pnpm instead of npm
-- Verify Node.js 18+ is installed
-- Check WebSocket connection in browser console
+- Check port 8765 is not in use: `lsof -i :8765`
 
 **Connection Issues:**
-- Backend must be running before starting frontend
+- Backend must be running before connecting Foxglove Studio
 - Verify WebSocket URL: `ws://localhost:8765`
-- Check browser developer console for error messages
+- Ensure Foxglove protocol is properly advertised (check console output)
+
+**Foxglove Studio Issues:**
+- Use WebSocket connection type (not Rosbridge or other protocols)
+- Wait for channels to appear in the sidebar
+- Check browser console for WebSocket errors
 
 ## 📚 Documentation
 
-- [MVP Charter](mvp-charter.md) - Detailed requirements and specifications
+- [MVP Charter](mvp-charter.md) - Detailed requirements and specifications  
 - [Backend README](backend/README.md) - Backend-specific documentation
 - [CLAUDE.md](CLAUDE.md) - AI assistant guidance and project context
 

@@ -12,8 +12,7 @@ This is a simulated robotics fleet monitoring dashboard MVP that demonstrates re
 ghost-fleet-dashboard/
 ├── README.md
 ├── mvp-charter.md    # Detailed MVP requirements and specifications
-├── backend/          # Python robotics simulation with foxglove-sdk
-└── frontend/         # Next.js dashboard application
+└── backend/          # Python robotics simulation with foxglove-sdk
 ```
 
 ## Technology Stack
@@ -23,9 +22,10 @@ ghost-fleet-dashboard/
 - Robot simulation with telemetry publishing at 10Hz
 - Data channels: `/location` (Vector3) and `/status` (JSON)
 
-**Frontend**: Next.js 14+ with TypeScript and Tailwind CSS
-- WebSocket client connecting to Foxglove protocol
-- Real-time dashboard with map visualization and status panels
+**Visualization**: Foxglove Studio Web App
+- Professional robotics dashboard at https://app.foxglove.dev
+- Direct WebSocket connection to backend simulation
+- Built-in visualization panels and alerting capabilities
 
 ## Development Commands
 
@@ -33,22 +33,21 @@ ghost-fleet-dashboard/
 ```bash
 cd backend
 pip install foxglove-sdk
-python robot_sim.py
+python run_sim.py
 ```
 
-### Frontend Setup
-```bash
-cd frontend
-npm install
-npm run dev
-```
+### Visualization Setup
+1. Navigate to https://app.foxglove.dev
+2. Click "Open connection" → "Foxglove WebSocket"
+3. Enter URL: `ws://localhost:8765`
+4. Add visualization panels for `/location` and `/status` channels
 
 ## Core Architecture
 
 - **Real-time Telemetry**: Foxglove WebSocket protocol for 10Hz data streaming
 - **Simulation Backend**: Python script simulating robot movement, battery, and error states
-- **Dashboard Frontend**: Next.js app with live map visualization and alert system
-- **Data Flow**: Backend publishes to Foxglove server → Frontend subscribes via WebSocket
+- **Professional Visualization**: Foxglove Studio web app with industry-standard robotics tools
+- **Data Flow**: Backend publishes to Foxglove server → Foxglove Studio visualizes data
 
 ## Key Features
 
@@ -58,11 +57,11 @@ npm run dev
 - Error state simulation (30% chance every 20 seconds, 5-second recovery)
 - Console logging for operation verification
 
-### Frontend Dashboard
-- 500x500 SVG map with animated robot position
-- Real-time status panel (battery %, operational state)
-- Alert system: Low battery (≤20%) and error state warnings
-- Color-coded status indicators
+### Foxglove Studio Visualization
+- Real-time robot position tracking (2D/3D plots)
+- Battery status monitoring with gauges
+- Professional robotics dashboard interface
+- Built-in alerting capabilities for low battery/error states
 
 ## Data Schemas
 
@@ -79,15 +78,15 @@ npm run dev
 ## Testing & Validation
 
 - Run backend simulation and verify 10Hz publishing in console
-- Connect to `ws://localhost:8765` and confirm data reception
-- Test error state transitions and battery cycling
-- Validate real-time updates in dashboard with <200ms latency
+- Connect Foxglove Studio to `ws://localhost:8765` and confirm data reception
+- Test error state transitions and battery cycling  
+- Validate real-time updates in Foxglove Studio with <200ms latency
 - Ensure stable operation for 30+ minutes continuous use
 
 ## Development Notes
 
 - Follow MVP charter specifications in `mvp-charter.md`
-- Backend team focuses on Python simulation accuracy
-- Frontend team focuses on React/WebSocket integration
-- Use shared TypeScript interfaces for data contracts
-- Monitor WebSocket connection stability and browser performance
+- Backend focuses on realistic robot telemetry simulation
+- Visualization handled by professional Foxglove Studio tools
+- Monitor WebSocket connection stability and data streaming performance
+- Use Foxglove Studio's built-in panels for visualization instead of custom frontend

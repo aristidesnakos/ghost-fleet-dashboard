@@ -2,6 +2,7 @@
 
 import json
 import math
+import random
 import time
 from typing import Dict, Any
 
@@ -22,6 +23,11 @@ class RobotSimulation:
         self.radius = 100  # Circular movement radius
         self.center_x = 0
         self.center_y = 0
+        
+        # Error state management
+        self.last_error_check = 0
+        self.error_start_time = None
+        self.frozen_position = None
         
     def setup_channels(self):
         # Vector3 schema for location
@@ -50,7 +56,28 @@ class RobotSimulation:
         print(f"Created location channel: /location")
         print(f"Created status channel: /status")
 
-    def calculate_position(self, elapsed_time: float) -> Dict[str, float]:
+    def check_error_simulation(self, elapsed_time: float):
+        # Check for error state every 20 seconds with 30% chance
+        current_check_interval = int(elapsed_time // 20)
+        
+        if current_check_interval > self.last_error_check and self.state == "OPERATIONAL":
+            self.last_error_check = current_check_interval
+            if random.random() < 0.3:  # 30% chance
+                self.state = "ERROR"
+                self.error_start_time = time.time()
+                # Freeze current position
+                self.frozen_position = self.calculate_normal_position(elapsed_time)
+                print(f"ALERT: Robot entered ERROR state at position ({self.frozen_position['x']:.1f}, {self.frozen_position['y']:.1f})")
+        
+        # Auto-recovery after 5 seconds
+        if self.state == "ERROR" and self.error_start_time:
+            if time.time() - self.error_start_time >= 5.0:
+                self.state = "OPERATIONAL"
+                self.error_start_time = None
+                self.frozen_position = None
+                print("RECOVERY: Robot returned to OPERATIONAL state")
+
+    def calculate_normal_position(self, elapsed_time: float) -> Dict[str, float]:
         # Circular movement using sin/cos calculations
         # Complete circle every 20 seconds (0.314 rad/s = 2π/20)
         angular_velocity = 2 * math.pi / 20  
@@ -61,6 +88,13 @@ class RobotSimulation:
         z = 0.0  # Ground level
         
         return {"x": x, "y": y, "z": z}
+
+    def calculate_position(self, elapsed_time: float) -> Dict[str, float]:
+        # Return frozen position during ERROR state, otherwise calculate normal movement
+        if self.state == "ERROR" and self.frozen_position:
+            return self.frozen_position
+        else:
+            return self.calculate_normal_position(elapsed_time)
     
     def update_battery(self, elapsed_time: float):
         # Battery decrements each cycle, reset when reaching 0
@@ -76,6 +110,7 @@ class RobotSimulation:
         elapsed_time = time.time() - self.time_start
         
         # Update simulation state
+        self.check_error_simulation(elapsed_time)
         position = self.calculate_position(elapsed_time)
         self.update_battery(elapsed_time)
         
@@ -109,6 +144,9 @@ class RobotSimulation:
         )
         
         print("Foxglove WebSocket Server running on ws://localhost:8765")
+        
+        # Setup channels with schemas
+        self.setup_channels()
         
         print("Simulation running - publishing telemetry at 10Hz (100ms intervals)")
         
