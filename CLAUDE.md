@@ -90,3 +90,4 @@ python run_sim.py
 - Visualization handled by professional Foxglove Studio tools
 - Monitor WebSocket connection stability and data streaming performance
 - Use Foxglove Studio's built-in panels for visualization instead of custom frontend
+- use lsof -i:8765 to check if backend is running
