@@ -42,7 +42,7 @@ function StatusBadge({ state }: StatusBadgeProps) {
 export function RobotTelemetry({ robotData, isConnected }: RobotTelemetryProps) {
   return (
     <div className="bg-white rounded-lg shadow-md p-6">
-      <h2 className="text-xl font-semibold mb-4">Robot Telemetry</h2>
+      <h2 className="text-xl font-semibold mb-4 text-gray-900">Robot Telemetry</h2>
       
       {robotData ? (
         <div className="space-y-4">
