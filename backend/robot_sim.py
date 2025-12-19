@@ -91,24 +91,24 @@ class RobotSimulation:
             "state": self.state
         }
         
-        # Publish to channels
-        timestamp = int(time.time() * 1_000_000_000)  # nanoseconds
-        
-        self.location_channel.log(location_msg, log_time=timestamp)
-        self.status_channel.log(status_msg, log_time=timestamp)
+        # Publish to channels using foxglove.log
+        foxglove.log("/location", location_msg)
+        foxglove.log("/status", status_msg)
         
         # Console logging
         print(f"Publishing... Location: ({position['x']:.1f}, {position['y']:.1f}), Battery: {self.battery}%, State: {self.state}")
 
     def run_simulation(self):
         print("Starting Robot Fleet Simulation...")
-        print("Foxglove WebSocket Server running on ws://localhost:8765")
-        
-        # Setup channels
-        self.setup_channels()
         
         # Start foxglove server
-        self.server = foxglove.start_server(name="Robot Fleet Simulation", host="0.0.0.0", port=8765)
+        self.server = foxglove.start_server(
+            name="Robot Fleet Simulation", 
+            host="0.0.0.0", 
+            port=8765
+        )
+        
+        print("Foxglove WebSocket Server running on ws://localhost:8765")
         
         print("Simulation running - publishing telemetry at 10Hz (100ms intervals)")
         
